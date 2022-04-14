@@ -1,0 +1,37 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="../static/css/chathome.css">
+<link rel="shortcut icon" type="image/png" href="../static/img/images/favicon1.png">
+<title>Chat Room | ArtificialMinds </title>
+</head>
+<body>
+  <section id="form-container">
+		<img id="logo" src="{% static 'img/images/chat-icon.png' %}" />
+
+		<div id="welcome-message">
+			<h1>Start Conversation</h1>
+			<p>Emotion recognition application just for you</p>
+		</div>
+
+    <form id="post-form" method="POST" action="checkview">
+      {% csrf_token %}
+      <div class="form-field">
+        <input type="text" name="room_name" id="room_name" width="100px" placeholder="Enter room name without spaces" autocomplete="off" />
+      </div>
+      <div class="form-field">
+        <input type="text" name="username" id="username" width="100px"  placeholder="Enter username"  autocomplete="off" />
+      </div>
+      <div class="form-field">
+        <p>By clicking "ENTER", you agree to our Terms of Service and Privacy Statement.</p>
+      </div>
+      <div class="form-field">
+        <input type="submit" value="Enter">
+      </div>
+    </form>
+	</section>
+</body>
+
+</html>

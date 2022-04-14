@@ -1,0 +1,56 @@
+{% extends "base2.html" %}
+
+{% load static %}
+
+    {% block title %} Settings | ArtificialMinds {% endblock %}
+
+    {% block css %}
+    <link rel="stylesheet" type="text/css" href="../static/css/asettings.css">
+    {% endblock%}
+
+    {% block nav_setting %}active{% endblock %}
+
+{% block content %}
+<div class="wrapper">
+    <div class="title">
+      Update Profile
+    </div>
+   
+    <div class="form">
+    <form id="updateForm" method="post">
+         {% csrf_token %}
+
+            <input type="text" class="input" name="sid" value="{{advisers.adviserID}}" placeholder="{{advisers.adviserID}}" hidden>
+
+        <div class="inputfield">
+            <label>First Name</label>
+            <input type="text" class="input" name="firstname" value="{{advisers.firstname}}" placeholder="{{advisers.firstname}}">
+        </div>  
+        <div class="inputfield">
+          <label>Last Name</label>
+           <input type="text" class="input" name="lastname" value="{{advisers.lastname}}" placeholder="{{advisers.lastname}}">
+        </div>
+        
+        <div class="inputfield">
+            <label>Email Address</label>
+            <input type="email" class="input" name="email" value="{{advisers.email}}" placeholder="{{advisers.email}}">
+        </div> 
+        <div class="inputfield">
+            <label>Phone Number</label>
+             <input type="text" class="input" name="contact" value="{{advisers.contact}}" placeholder="{{advisers.contact}}">
+        </div><br>
+
+        <div class="inputfield terms">
+          <p>Please review before clicking update.</p>
+        </div> 
+
+        <div class="inputfield">
+            <input type="submit" name="btnUpdate" class="btn">
+        </div>
+    </form>
+    </div>
+   
+</div>	
+{% endblock %}
+
+

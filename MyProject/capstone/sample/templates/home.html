@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+    {% load static %}
+
+    {% block title %} Home | ArtificialMinds {% endblock %}
+
+    {% block css %}
+    <link rel="stylesheet" type="text/css" href="../static/css/home.css">
+    {% endblock%}
+
+    {% block nav_home %} active {% endblock %}
+
+{% block content %}
+
+<div class="wrapper">
+    <h3>USER LIBRARY</h3>
+    <div class="container">
+        <div class="box">
+            <div class="icon">
+            <h4>Set Appointments</h4>
+            <img class="logo" src="../static/img/images/appointments.png">
+                <div class="button1">
+                    <a href="{% url 'sample:setappointment' %}">Create</a>
+                </div>
+            </div>
+        </div>
+        <div class="box">
+            <div class="icon">
+            <h4>View Appointments</h4>
+            <img class="logo" src="../static/img/images/appointment2.png">
+                <div class="button2">
+                    <a href="{% url 'sample:viewappointment' %}">View</a>
+                </div>
+            </div>
+        </div>
+        <div class="box">
+            <div class="icon">
+            <h4>Inside Insights</h4>
+            <img class="logo1" src="../static/img/images/survey.png">
+                <div class="button2">
+                    <a href="#">Start</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

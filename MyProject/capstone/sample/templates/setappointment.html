@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+    {% load static %}
+
+    {% block title %} Book Appointments | ArtificialMinds {% endblock %}
+
+    {% block css %}
+    <link rel="stylesheet" type="text/css" href="../static/css/setappointment.css">
+    {% endblock%}
+    {% block nav_home %} active {% endblock %}
+
+{% block content %}
+  
+<!-- start code here-->
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+<script type="text/javascript">
+  $(document).ready(function(){
+    $('input[type="radio"]').click(function(){
+      var val = $(this).attr("value");
+      var target = $("." + val);
+      $(".msg").not(target).hide();
+      $(target).show();
+    });
+  });
+</script>
+
+
+<div class="body">
+    <div class="container">
+        <h3>Book an appointment.</h3>
+        <br>
+        <div class="content">
+            <form action="#" method="POST">
+                {% csrf_token %}
+                <input type="text" name="student_id" value="{{students.studentID}}" hidden>
+                <div class="meeting">
+                    <span class="meeting-title"><strong>Type of Meeting</strong></span>
+                    <p style="font-size: 10px;">Choose one to proceed:</p>
+                    <div class="category">
+                       <input type="radio" name="meeting_type" value="live" required> Live Video 
+                       <input type="radio" name="meeting_type" value="chat" required> Chat Only<br>
+                    </div>
+                </div>
+               
+                <div class="" style="padding-top: 5px;">
+                    <p style="font-size: 14px;"><i>Available Counselors</i></p>
+                    <select name="meeting_counselor" id="counselor">
+                        {% for qs in adviser %}
+                        <option value="{{qs.adviserID}}">{{qs.firstname}} {{qs.lastname}}</option>
+                        {% endfor %}                 
+                    </select>
+                    <br>
+                    <p style="font-size: 14px;"><strong>Date and Time of Appointment</strong></p>
+                    <input type ="date" name="meeting_date" value="<?php echo $today; ?>" required>
+                    <input type= "time" name="meeting_time" required>
+                </div>
+             
+
+                 <p style="font-size: 12px; padding-top: 50px;">Please review your appointment before proceeding.</a></p>
+                <div class="button">
+                    <input type="submit" value="Book Appointment">
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+  
+  <?php
+
+  $month = date('m');
+  $day = date('d');
+  $year = date('Y');
+
+  $today = $year . '-' . $month . '-' . $day;
+  ?>
+<!-- end here -->
+
+{% endblock %}
+

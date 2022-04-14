@@ -1,0 +1,379 @@
+{% extends "base2.html" %}
+
+    {% load static %}
+
+    {% block title %} Home | ArtificialMinds {% endblock %}
+
+    {% block css %}
+    <link rel="stylesheet" type="text/css" href="../static/css/homeAdviser.css">
+	<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+	<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+	
+<!-- 
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href = "https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.css">
+    <link rel = "stylesheet" href = "https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap4.min.css">
+
+    <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+	<script src="http://code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+	<script src = "https://code.jquery.com/jquery-3.5.1.js"></script>
+	<script src ="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+	<script src ="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script> -->
+    {% endblock%}
+
+    {% block nav_home %} active {% endblock %}
+
+{% block content %}
+<section class="indent-1">
+    <!-- Section 1 --> 
+    <section>
+		<!--for demo wrap-->
+		<h1 style="margin-left: 20px; color:  rgb(61, 61, 61);">Requested Appointments</h1>
+		<br>
+		<div class="tbl-header">
+		  <table cellpadding="0" cellspacing="0" border="0">
+			<thead>
+			  <tr>
+				<th style="width: 80px;">Meeting</th>
+				<th style="width: 150px;">Name</th>
+				<th style="width: 130px;">Date</th>
+				<th style="width: 100px;">Time</th>
+				<th>Action</th>
+			  </tr>
+			</thead>
+		  </table>
+		</div>
+		<div class="tbl-content">
+		  <table cellpadding="0" cellspacing="0" border="0">
+			  <!--JUS, loop nlng from database. Example rana sa sud sa "td"-->
+			<tbody>
+				{% for qs in appointments %}
+			  <tr>
+			  	<!-- <td><input type="text" name="sid" value="{{qs.student_id}}" hidden></td>
+			  	<td><input type="text" name="aid" value="{{qs.meeting_counselor_id}}" hidden></td> -->
+				<td style="width: 80px;">{{qs.meeting_type}}</td>
+				<td style="width: 150px;">{{qs.student.firstname}} {{qs.student.lastname}}</td>
+				<td style="width: 130px;">{{qs.meeting_date}}</td>
+				<td style="width: 100px;">{{qs.meeting_time}}</td>
+				<td>
+					<a class="button" href="#modal-{{qs.student_id}}{{qs.meeting_counselor_id}}{{qs.appointmentID}}"><button class="btn">Approve</button></a>
+					<div class="popup" id="modal-{{qs.student_id}}{{qs.meeting_counselor_id}}{{qs.appointmentID}}">
+						<a class="popup__overlay"></a>
+						<div class="popup__wrapper1">
+							<a class="popup__close" href="#" style="font-size: 20px;">&times;</a>
+							<p style="font-size: 18px; margin-top: 15px; pointer-events: none;">Approve appointment</p><br>
+							
+							<form id="deleteForm" method="post">
+								{% csrf_token %}
+								<p style="font-size: 13px; font-weight: 400; text-transform: none; text-align: left; margin-left: 45px; 
+								pointer-events: none;">To complete this approval, please enter room name.</p>
+								<div class="input-box">
+									<span class="details">Room Name</span>
+									<input autocomplete="off" type="text" name="room_code" placeholder="Enter room name" required>
+								</div>
+								<input type="text" name="sid" value="{{qs.student_id}}" hidden>
+              					<input type="text" name="aid" value="{{qs.meeting_counselor_id}}" hidden>
+              					<input type="text" name="apid" value="{{qs.appointmentID}}" hidden>
+								<p style="font-size: 12px; font-style: italic; font-weight: 200; text-transform: none; 
+								pointer-events: none;">By clicking "YES", you are approving this appointment.</p><br>
+								<button type="submit" class="btn_yes" id="btnDelete" name="btnApprove">YES</button>
+								<a href="{% url 'sample:ahome' %}"><button type="button" class="btn_no">NO</button></a>
+							</form>
+						</div>
+					</div>
+
+					<a class="button" href="#modal1-{{qs.student_id}}{{qs.meeting_counselor_id}}{{qs.appointmentID}}"><button class="btn1">Re-schedule</button></a>
+					<div class="popup" id="modal1-{{qs.student_id}}{{qs.meeting_counselor_id}}{{qs.appointmentID}}">
+						<a class="popup__overlay"></a>
+						<div class="popup__wrapper">
+							<a class="popup__close" href="#" style="font-size: 20px;">&times;</a>
+		
+							<h4 style="text-align: center; pointer-events: none;">Change schedule date</h4>
+							<form id="updateForm" method="post">
+								{% csrf_token %}
+								<input type="text" name="sid" value="{{qs.student_id}}" hidden>
+              					<input type="text" name="aid" value="{{qs.meeting_counselor_id}}" hidden>
+              					<input type="text" name="apid" value="{{qs.appointmentID}}" hidden>
+								<div class="date">
+									<label>Set Date</label>
+								  	<input type="Date" class="form-control" id="id-date" name="newdate" placeholder="Date of Appointment" value={{qs.meeting_date}} required />
+								</div>
+								<div class="time">
+									<label>Set Time</label>
+								  	<input type="time" class="form-control" id="id-time" name="newtime" value={{qs.meeting_time}} required />
+								</div>
+								<hr>
+								<p style="font-size: 13px; font-weight: 400; text-transform: none; text-align: left; margin-left: 45px; margin-top: 10px; 
+								pointer-events: none;">To complete this appointment, please enter room name.</p>
+								<div class="input-box">
+									<span class="details">Room Name</span>
+									<input autocomplete="off" type="text" name="room_name" placeholder="Enter room name" required>
+								</div>
+								<p style="font-size: 12px; font-style: italic; font-weight: 200; text-transform: none;
+								pointer-events: none;">By clicking "UPDATE", you are rescheduling and approving this appointment.</p><br>
+							
+								  	<button type="submit" class="btn_yes" id="btnUpdate" name="btnUpdate">UPDATE</button>
+									<a href="{% url 'sample:ahome' %}"><button type="button" class="btn_no">CANCEL</button></a>
+							</form>
+						</div>
+					</div>
+				</td>
+			  </tr>			  
+			</tbody>
+
+			{% endfor %}
+		  </table>
+	</div>
+	</section>
+
+    <!-- Section 2 -->
+    
+    <section>
+		<h1 style="margin-left: 20px;color:  rgb(61, 61, 61)">History</h1>
+		<br>
+		<div class="tbl-header">
+			<table cellpadding="0" cellspacing="0" border="0" class="table2">
+				<thead>
+				<tr>
+					<th style="width: 120px;">Student Name</th>
+					<th style="width: 120px;">Date</th>
+					<th style="width: 120px;">Time</th>
+					<th style="width: 120px;">Rate</th>
+					<th style="width: 120px;">Details</th>
+				</tr>
+				</thead>
+			</table>
+			</div>
+			<div class="tbl-content">
+			<table cellpadding="0" cellspacing="0" border="0">
+				<tbody>
+					{% for qs in done_meeting %}
+				<tr>					
+					<td style="width: 120px;">{{qs.student.firstname}}</td>
+					<td style="width: 120px;">{{qs.meeting_date}}</td>
+					<td style="width: 120px;">{{qs.meeting_type}}</td>
+					<td style="width: 120px;"> 
+						<div class="center">
+							<a class="button" href="#modal0"><button class="btn4">View</button></a>
+							<div class="popup" id="modal0">
+								<a class="popup__overlay"></a>
+								<div class="popup__wrapper2">
+									<a class="popup__close" href="#" style="font-size: 20px;">&times;</a>
+					
+									<h4>STUDENT INFORMATION & STATUS</h4>
+									<div class="caution">
+										<h5><strong>CAUTION:</strong> The information below is classified. The circulation of this information shall be limited to 
+											those persons who are authorized to have the information in the performance of their duties.
+										</h5>
+									</div>
+									
+									<div class="student_details">
+										<div class="div1">
+											<img src="../static/img/images/user.png">
+										</div>
+										<div class="div2">
+											<p>Name <span style="margin-left: 18px;">:</span><span style="margin-left: 10px;">Carl Cordova</span></p> 
+											<p>Email <span style="margin-left: 18px;">:</span><span style="margin-left: 10px;">carl.cordova@cit.edu</span></p> 
+											<p>Phone <span style="margin-left: 12px;">:</span><span style="margin-left: 10px;">09611216904</span></p>
+											<p>Course <span style="margin-left: 3px;">:</span><span style="margin-left: 10px;">BSIT</span></p> 
+											<p>Year <span style="margin-left: 24px;">:</span><span style="margin-left: 10px;">4</span></p>
+											<p style="font-weight: bold; font-size: 20px;">Status <span style="margin-left: 7px; font-weight: 500; font-size: 20px;">:</span><span style="margin-left: 10px; font-weight: 500; font-size: 20px; font-style: italic;">MILD</span></p> 
+										</div>
+								
+										<hr />
+									
+										<div class="remarks">
+											<h5>Written Remarks for this student</h5>
+											<textarea placeholder="Aa"> Remarks from database are shown here...</textarea>
+										</div>
+											
+									</div>
+								</div>
+							</div>
+						</div>
+					</td>
+					
+				</tr>			  
+				</tbody>
+				{% endfor %}
+			</table>
+		</div>
+	</section>
+
+    <!-- Section 3 -->
+    <section>
+		<h1 style="margin-left: 20px;color:  rgb(61, 61, 61) ">Approved Appointments Meeting Type: VIDEO</h1>
+		<br>
+		<div class="tbl-header">
+			<table cellpadding="0" cellspacing="0" border="0" class="table2">
+				<thead>
+				<tr>
+					<th style="width: 80px;">Meeting</th>
+					<th style="width: 100px;">Name</th>
+					<th style="width: 100px;">Date</th>
+					<th style="width: 100px;">Time</th>
+					<th style="width: 100px;">Room</th>
+					<th>Action</th>
+				</tr>
+				</thead>
+			</table>
+			</div>
+			<div class="tbl-content">
+			<table cellpadding="0" cellspacing="0" border="0">
+				<tbody>
+					{% for qs in approved_live %}
+				<tr>					
+					<td style="width: 80px;">{{qs.meeting_type}}</td>
+					<td style="width: 100px;">{{qs.student.firstname}} {{qs.student.lastname}}</td>
+					<td style="width: 100px;">{{qs.meeting_date}}</td>
+					<td style="width: 100px;">{{qs.meeting_time}}</td>
+					<td style="width: 100px;">{{qs.room_code}}</td>
+					<td>
+						<a class="button" href="#modal01-{{qs.student_id}}{{qs.meeting_counselor_id}}{{qs.appointmentID}}"><button class="btn3">Start</button></a>
+						<div class="popup" id="modal01-{{qs.student_id}}{{qs.meeting_counselor_id}}{{qs.appointmentID}}">
+							<a class="popup__overlay"></a>
+							<section id="form-container">
+								<a class="popup__close" href="#" style="font-size: 20px;">&times;</a>
+								<img id="logo" src="{% static 'img/images/chat-icon.png' %}" />
+						
+								<div id="welcome-message">
+									<h1>Join Meeting</h1>
+									<p>Emotion recognition application just for you</p>
+								</div>
+						
+								<form id="videoform">
+									<div class="form-field">
+										<input autocomplete="off" type="text" name="room" value="{{qs.room_code}}" placeholder="{{qs.room_code}}" disabled/>
+									</div>
+						
+									<div class="form-field">
+										<input autocomplete="off" type="text" name="username" value="{{qs.meeting_counselor.firstname}} {{qs.meeting_counselor.lastname}}" placeholder="{{qs.meeting_counselor.firstname}}" disabled/>
+									</div>
+									<div class="form-field">
+										<p>By clicking "JOIN", you agree to our Terms of Service and Privacy Statement.</p>
+									</div>
+
+									<div class="form-field">
+										<input type="submit" value="Join" />
+									</div>
+								</form>
+							</section>
+						</div>
+					</td>
+					 {% endfor %}
+				</tr>		
+				</tbody>
+			</table>
+		</div>
+	</section>
+	
+	<!-- Section 4 -->
+    <section>
+		<h1 style="margin-left: 20px;color:  rgb(61, 61, 61)">Approved Appointments  Meeting Type: CHAT</h1>
+		<br>
+		<div class="tbl-header">
+			<table cellpadding="0" cellspacing="0" border="0" class="table2">
+				<thead>
+				<tr>
+					<th style="width: 80px;">Meeting</th>
+					<th style="width: 100px;">Name</th>
+					<th style="width: 100px;">Date</th>
+					<th style="width: 100px;">Time</th>
+					<th style="width: 100px;">Room</th>
+					<th>Action</th>
+				</tr>
+				</thead>
+			</table>
+			</div>
+			<div class="tbl-content">
+			<table cellpadding="0" cellspacing="0" border="0">
+				<tbody>
+					{% for qs in approved_chat %}
+				<tr>					
+					<td style="width: 80px;">{{qs.meeting_type}}</td>
+					<td style="width: 100px;">{{qs.student.firstname}} {{qs.student.lastname}}</td>
+					<td style="width: 100px;">{{qs.meeting_date}}</td>
+					<td style="width: 100px;">{{qs.meeting_time}}</td>
+					<td style="width: 100px;">{{qs.room_code}}</td>
+					<td> 
+						<!-- <button class="btn3" onclick="document.location='chathome'">Start</button> -->
+						<a class="button" href="#modal-{{qs.student_id}}{{qs.meeting_counselor_id}}{{qs.appointmentID}}"><button class="btn3">Start</button></a>
+						<div class="popup" id="modal-{{qs.student_id}}{{qs.meeting_counselor_id}}{{qs.appointmentID}}">
+							<a class="popup__overlay"></a>
+							<section id="form-container">
+								<a class="popup__close" href="#" style="font-size: 20px;">&times;</a>
+								<img id="logo" src="{% static 'img/images/chat-icon.png' %}" />
+						
+								<div id="welcome-message">
+									<h1>Start Conversation</h1>
+									<p>Emotion recognition application just for you</p>
+								</div>
+						
+							<form id="post-form" method="POST" action="checkview">
+								{% csrf_token %}
+								<div class="form-field">
+									<input type="text" name="room_name" id="room_name" width="100px" value="{{qs.room_code}}" autocomplete="off" />
+								</div>
+								<div class="form-field">
+									<input type="text" name="username" id="username" width="100px"  value="{{qs.meeting_counselor.firstname}}"  autocomplete="off" />
+								</div>
+								<div class="form-field">
+									<p>By clicking "ENTER", you agree to our Terms of Service and Privacy Statement.</p>
+								</div>
+								<div class="form-field">
+									<input type="submit" value="Enter">
+								</div>
+							</form>
+							</section>
+						</div>
+					</td>
+				</tr>		
+					  {% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</section>
+	
+	
+</section>
+<script>
+
+    let form = document.getElementById('videoform')
+
+    let handleSubmit = async (e) => {
+        e.preventDefault()
+        let room = e.target.room.value.toUpperCase()
+        let name = e.target.username.value
+
+        let response = await fetch(`/get_token/?channel=${room}`)
+        let data = await response.json()
+
+        let UID = data.uid
+        let token = data.token
+
+        sessionStorage.setItem('UID', UID)
+        sessionStorage.setItem('token', token)
+        sessionStorage.setItem('room', room)
+        sessionStorage.setItem('name', name)
+
+        window.open('/videoroom/', '_self')
+    }
+
+
+    form.addEventListener('submit', handleSubmit)
+</script>
+
+<script>
+	$(window).on("load resize ", function() {
+		var scrollWidth = $('.tbl-content').width() - $('.tbl-content table').width();
+		$('.tbl-header').css({'padding-right':scrollWidth});
+	}).resize();
+</script>
+
+
+{% endblock %}

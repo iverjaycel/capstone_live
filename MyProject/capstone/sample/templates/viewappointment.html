@@ -1,0 +1,202 @@
+{% extends "base.html" %}
+
+    {% load static %}
+
+    {% block title %} View Appointments | ArtificialMinds {% endblock %}
+
+    {% block css %}
+    <link rel="stylesheet" type="text/css" href="../static/css/viewappointment.css">
+    {% endblock%}
+    {% block nav_home %} active {% endblock %}
+
+{% block content %}
+<div class="limiter">
+
+<section class="indent-1">
+    <!-- Section 1 --> 
+    <section>
+		<!--for demo wrap-->
+		<h1 style="margin-left: 20px;">Meeting Type: <strong>VIDEO</strong></h1>
+		<br>
+		<div class="tbl-header">
+		  <table cellpadding="0" cellspacing="0" border="0">
+			<thead>
+			  <tr>
+				<th style="width: 100px;">Counselor</th>
+				<th style="width: 100px;">Date</th>
+				<th style="width: 100px;">Time</th>
+				<th style="width: 50px;">Type</th>
+				<th style="width: 100px;">Status</th>
+				<th style="width: 100px;">Room</th>		
+				<th class="column3">Action</th>	
+			  </tr>
+			</thead>
+		  </table>
+		</div>
+		<div class="tbl-content">
+		  <table cellpadding="0" cellspacing="0" border="0">
+			  <!--JUS, loop nlng from database. Example rana sa sud sa "td"-->
+			<tbody>
+				{% for qs in live_appointment %}
+				<tr>
+					<td style="width: 100px;">{{qs.meeting_counselor.firstname}} {{qs.meeting_counselor.lastname}}</td> <!--Status Request-->
+					<td style="width: 100px;">{{qs.meeting_date}}</td> <!--appointment id-->
+					<td style="width: 100px;">{{qs.meeting_time}}</td> <!--Type of Meetong-->
+					<td style="width: 50px;">{{qs.meeting_type}}</td> <!--Status Request-->
+					<td  style="width: 100px;">{{qs.meeting_status}}</td> <!--Type of Meetong-->
+					<td  style="width: 100px;">{{qs.room_code}}</td> <!--Room Name -->
+					<td>
+						<a class="button" href="#modal01-{{qs.student_id}}{{qs.meeting_counselor_id}}{{qs.appointmentID}}"><button class="btn3">Start</button></a>
+						<div class="popup" id="modal01-{{qs.student_id}}{{qs.meeting_counselor_id}}{{qs.appointmentID}}">
+							<a class="popup__overlay"></a>
+							<section id="form-container">
+								<a class="popup__close" href="#" style="font-size: 20px;">&times;</a>
+								<img id="logo" src="{% static 'img/images/chat-icon.png' %}" />
+						
+								<div id="welcome-message">
+									<h1>Join Meeting</h1>
+									<p>Emotion recognition application just for you</p>
+								</div>
+						
+								<form id="videoform" method="POST">
+									<div class="form-field">
+										<input autocomplete="off" type="text" name="room" value="{{qs.room_code}}" placeholder="{{qs.room_code}}" disabled/>
+									</div>
+						
+									<div class="form-field">
+										<input autocomplete="off" type="text" name="username" value="{{qs.student.firstname}}" placeholder="{{qs.student.firstname}}" disabled/>
+									</div>
+									<div class="form-field">
+										<p>By clicking "JOIN", you agree to our Terms of Service and Privacy Statement.</p>
+									</div>
+									<div class="form-field">
+										<input type="submit" value="Join" />
+									</div>
+								</form>
+							</section>
+						</div>
+					</td>
+				</tr>	
+			{% endfor %}			  
+			</tbody>
+		  </table>
+	</div>
+	</section>
+
+    <!-- Section 2 -->
+    <section style="margin-left: 150px;">
+		<h1 style="margin-left: 20px;">Meeting Type: <strong>CHAT</strong></h1>
+		<br>
+		<div class="tbl-header">
+			<table cellpadding="0" cellspacing="0" border="0" class="table2">
+				<thead>
+					<tr>
+						<th style="width: 100px;">Counselor</th>
+						<th style="width: 100px;">Date</th>
+						<th style="width: 100px;">Time</th>
+						<th style="width: 50px;">Type</th>
+						<th style="width: 100px;">Status</th>
+						<th style="width: 100px;">Room</th>		
+						<th class="column3">Action</th>	
+					</tr>
+				</thead>
+			</table>
+			</div>
+			<div class="tbl-content">
+			<table cellpadding="0" cellspacing="0" border="0">
+				<tbody>
+					{% for qs in chat_appointment %}
+					<tr>
+						<td style="width: 100px;">{{qs.meeting_counselor.firstname}} {{qs.meeting_counselor.lastname}}</td> <!--Status Request-->
+					<td style="width: 100px;">{{qs.meeting_date}}</td> <!--appointment id-->
+					<td style="width: 100px;">{{qs.meeting_time}}</td> <!--Type of Meetong-->
+					<td style="width: 50px;">{{qs.meeting_type}}</td> <!--Status Request-->
+					<td  style="width: 100px;">{{qs.meeting_status}}</td> <!--Type of Meetong-->
+					<td  style="width: 100px;">{{qs.room_code}}</td> <!--Room Name -->
+					<td> 
+						<!-- <button class="btn3" onclick="document.location='chathome'">Start</button> -->
+						<a class="button" href="#modal-{{qs.student_id}}{{qs.meeting_counselor_id}}{{qs.appointmentID}}"><button class="btn3">Start</button></a>
+						<div class="popup" id="modal-{{qs.student_id}}{{qs.meeting_counselor_id}}{{qs.appointmentID}}">
+							<a class="popup__overlay"></a>
+							<section id="form-container">
+								<a class="popup__close" href="#" style="font-size: 20px;">&times;</a>
+								<img id="logo" src="{% static 'img/images/chat-icon.png' %}" />
+						
+								<div id="welcome-message">
+									<h1>Start Conversation</h1>
+									<p>Emotion recognition application just for you</p>
+								</div>
+						
+							<form id="post-form" method="POST" action="checkview">
+								{% csrf_token %}
+								<div class="form-field">
+									<input type="text" name="room_name" id="room_name" width="100px" value="{{qs.room_code}}" autocomplete="off"/>
+								</div>
+								<div class="form-field">
+									<input type="text" name="username" id="username" width="100px" value="{{qs.student.firstname}}" autocomplete="off"/>
+								</div>
+								<div class="form-field">
+									<p>By clicking "ENTER", you agree to our Terms of Service and Privacy Statement.</p>
+								</div>
+								<div class="form-field">
+									<input type="submit" value="Enter">
+								</div>
+							</form>
+							</section>
+						</div>
+					</td>
+					</tr>	
+				{% endfor %}			  
+				</tbody>
+			</table>
+		</div>
+	</section>
+	
+</section>
+<script>
+	$(window).on("load resize ", function() {
+		var scrollWidth = $('.tbl-content').width() - $('.tbl-content table').width();
+		$('.tbl-header').css({'padding-right':scrollWidth});
+	}).resize();
+</script>
+
+<script>
+    let form = document.getElementById('videoform')
+
+    let handleSubmit = async (e) => {
+        e.preventDefault()
+        let room = e.target.room.value.toUpperCase()
+        let name = e.target.username.value
+
+        let response = await fetch(`/get_token/?channel=${room}`)
+        let data = await response.json()
+
+        let UID = data.uid
+        let token = data.token
+
+        sessionStorage.setItem('UID', UID)
+        sessionStorage.setItem('token', token)
+        sessionStorage.setItem('room', room)
+        sessionStorage.setItem('name', name)
+
+        window.open('/videoroom/', '_self')
+    }
+
+
+
+    form.addEventListener('submit', handleSubmit)
+</script>
+
+
+<!--===============================================================================================-->	
+<script src="vendor/jquery/jquery-3.2.1.min.js"></script>
+<!--===============================================================================================-->
+<script src="vendor/bootstrap/js/popper.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+<!--===============================================================================================-->
+<script src="vendor/select2/select2.min.js"></script>
+<!--===============================================================================================-->
+<script src="js/main.js"></script>
+
+{% endblock %}
+
