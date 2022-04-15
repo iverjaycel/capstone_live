@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-+9beq%fg_)l9sl49bd8ceh_d=e0y#t5c^wba5#7hya7p!+^p6t
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['artificialminds.herokuapp.com', '127.0.0.1']
+ALLOWED_HOSTS = ['artificialminds.herokuapp.com']
 
 
 # Application definition
@@ -81,7 +81,7 @@ DATABASES = {
         'USER': 'root',
         'PASSWORD': '',
         'HOST': '127.0.0.1',
-        'PORT': '3306',
+        'PORT': '3000',
         'OPTIONS': {
         'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
         },
@@ -129,3 +129,5 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
